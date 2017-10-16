@@ -32,6 +32,8 @@ public class Core {
     private static String fbLoginButtonCss ="#loginbutton";
 
     private static String gpButtonCss = "a.gp.social-auth-link";
+    private static String gpEmailInputCss ="#identifierId";
+    private static String gpPassInputCss = ""
 
     private static String profileNameCss = "p.user-name";
     private static String profileStatusCss = "p.user-expert";
@@ -83,6 +85,11 @@ public class Core {
         Thread.sleep(2000);
     }
 
+    static void clickGpButton() throws InterruptedException {
+        WebElement element = driver.findElement(By.cssSelector(gpButtonCss));
+        element.click();
+        Thread.sleep(2000);
+    }
 
     static void authEmail() throws InterruptedException {
         WebElement emailField = driver.findElement(By.cssSelector(emailInput));
@@ -136,6 +143,25 @@ public class Core {
         String userStatus = driver.findElement(By.cssSelector(profileStatusCss)).getText();
         assertEquals("пользователь", userStatus.toLowerCase());
     }
+
+    static void authWithGp() throws InterruptedException{
+        WebElement vkEmailField = driver.findElement(By.cssSelector(gpEmailInputCss));
+        vkEmailField.sendKeys("tt.ratengoods@gmail.com");
+        WebElement vkPassField = driver.findElement(By.cssSelector(gpPassInputCss));
+        vkPassField.sendKeys("Test1ng");
+        WebElement vkLoginButton = driver.findElement(By.cssSelector("#install_allow"));
+        vkLoginButton.click();
+
+        Thread.sleep(3000);
+        driver.get(profileUrl);
+
+        String userName = driver.findElement(By.cssSelector(profileNameCss)).getText();
+        assertEquals("Valentinnн"+"\n"+"Kuzmenkovvв", userName);
+
+        String userStatus = driver.findElement(By.cssSelector(profileStatusCss)).getText();
+        assertEquals("пользователь", userStatus.toLowerCase());
+    }
+
 
     static void quit() {
         driver.close();

@@ -23,7 +23,6 @@ public class LoginTests {
     @Test
     public void loadMainPageTest() throws Exception {
         Core.loadMainPage();
-
     }
 
     @Test
@@ -31,9 +30,6 @@ public class LoginTests {
         Core.loadMainPage();
         Core.clickLoginButton();
         Core.authEmail();
-
-
-
     }
 
     @Test
@@ -42,7 +38,6 @@ public class LoginTests {
         Core.clickLoginButton();
         Core.clickVkButton();
         Core.authWithVk();
-
     }
 
     @Test
@@ -51,9 +46,15 @@ public class LoginTests {
         Core.clickLoginButton();
         Core.clickFbButton();
         Core.authWithFb();
-
     }
 
+    @Test
+    public void loginSocialGplustest() throws Exception{
+        Core.loadMainPage();
+        Core.clickLoginButton();
+        Core.clickGpButton();
+        Core.authWithGp();
+    }
 
 }
 
