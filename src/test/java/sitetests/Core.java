@@ -17,6 +17,7 @@ public class Core {
     private static String baseUrl = "http://stage.ratengoods.com/";
     private static String userButtonCss = ".user";
     private static String groupPolicyCloseButton = "div.popup-policy__close";
+    private static String vkButton = "#sign-in > div.social-auth > ul > li:nth-child(1) > a";
 
     static void setup() {
         // Иногда кнопки не нажимаются, поэтому сделал запуск браузера в полном экране.
@@ -42,14 +43,17 @@ public class Core {
 
     static void clickLoginButton(){
         WebElement element = driver.findElement(By.cssSelector(userButtonCss));
-        element.clear();
+        element.click();
+    }
 
-
+    static void clickVkButton(){
+        WebElement element = driver.findElement(By.cssSelector(vkButton));
+        element.click();
     }
 
     static void quit() {
         driver.close();
-        System.exit(0);
+
     }
 
   /*  static void slidePromo(int count) throws InterruptedException {

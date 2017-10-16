@@ -3,22 +3,22 @@ package sitetests;
 import org.junit.*;
 
 public class LoginTests {
-    @BeforeClass
-    public static void setUpClass() throws Exception {
+    @Before
+    public void setUpClass() throws Exception {
 
         Core.setup();
     }
 
-    @AfterClass
-    public static void tearDownClass () throws Exception {
+    @After
+    public  void tearDownClass () throws Exception {
         Core.quit();
     }
 
-//
-//    @After
-//    public void tearDown() throws Exception {
-//        Core.quit();
-//    }
+
+    @AfterClass
+    public static void tearDown() throws Exception {
+        System.exit(0);
+    }
 
     @Test
     public void loadMainPageTest() throws Exception {
@@ -27,10 +27,18 @@ public class LoginTests {
     }
 
     @Test
-    public void loginWithEmailtest() throws Exception{
+    public void loginWithEmailTest() throws Exception{
         Core.loadMainPage();
         Core.clickLoginButton();
 
+
+    }
+
+    @Test
+    public void loginSocialVkTest() throws Exception{
+        Core.loadMainPage();
+        Core.clickLoginButton();
+        Core.clickVkButton();
     }
 
 }
