@@ -8,16 +8,38 @@ import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.util.concurrent.TimeUnit;
 
+import static org.junit.Assert.*;
+
 
 public class Core {
 
     // Объявление переменных ссылок и локаторов элементов
     public static WebDriver driver;
 
-    private static String baseUrl = "http://stage.ratengoods.com/";
+    private static String baseUrl = "http://ratengoods.com/";
+    private static String profileUrl ="http://ratengoods.com/user/profile/articles/";
+
     private static String userButtonCss = ".user";
     private static String groupPolicyCloseButton = "div.popup-policy__close";
-    private static String vkButton = "#sign-in > div.social-auth > ul > li:nth-child(1) > a";
+
+    private static String vkButtonCss = "a.vk.social-auth-link";
+    private static String vkEmailInputCss ="#login_submit > div > div > input:nth-child(7)";
+    private static String vkPassInputCss ="#login_submit > div > div > input:nth-child(9)";
+
+    private static String fbButtonCss = "a.fb.social-auth-link";
+    private static String fbEmailInputCss ="#email";
+    private static String fbPassInputCss ="#pass";
+    private static String fbLoginButtonCss ="#loginbutton";
+
+    private static String gpButtonCss = "a.gp.social-auth-link";
+
+    private static String profileNameCss = "p.user-name";
+    private static String profileStatusCss = "p.user-expert";
+    public static String emailInput = ".login-email";
+    public static String passwordInput =".login-password";
+    public static String loginButton ="#id1";
+
+
 
     static void setup() {
         // Иногда кнопки не нажимаются, поэтому сделал запуск браузера в полном экране.
@@ -41,14 +63,78 @@ public class Core {
 
     }
 
-    static void clickLoginButton(){
+    static void clickLoginButton() throws InterruptedException {
         WebElement element = driver.findElement(By.cssSelector(userButtonCss));
         element.click();
+        Thread.sleep(1000);
     }
 
-    static void clickVkButton(){
-        WebElement element = driver.findElement(By.cssSelector(vkButton));
+    static void clickVkButton() throws InterruptedException {
+        WebElement element = driver.findElement(By.cssSelector(vkButtonCss));
         element.click();
+        Thread.sleep(2000);
+
+
+    }
+
+    static void clickFbButton() throws InterruptedException {
+        WebElement element = driver.findElement(By.cssSelector(fbButtonCss));
+        element.click();
+        Thread.sleep(2000);
+    }
+
+
+    static void authEmail() throws InterruptedException {
+        WebElement emailField = driver.findElement(By.cssSelector(emailInput));
+        emailField.sendKeys("jah.jaha@gmail.com");
+        WebElement passwordField = driver.findElement(By.cssSelector(passwordInput));
+        passwordField.sendKeys("VAdb25qwe");
+        WebElement elementloginButton = driver.findElement(By.cssSelector(loginButton));
+        elementloginButton.click();
+        Thread.sleep(3000);
+        driver.get(profileUrl);
+
+        String userName = driver.findElement(By.cssSelector(profileNameCss)).getText();
+        assertEquals("ValentiN"+"\n"+"KuzmenkoV", userName);
+
+        String userStatus = driver.findElement(By.cssSelector(profileStatusCss)).getText();
+        assertEquals("пользователь", userStatus.toLowerCase());
+    }
+
+    static void authWithVk() throws InterruptedException{
+        WebElement vkEmailField = driver.findElement(By.cssSelector(vkEmailInputCss));
+        vkEmailField.sendKeys("t.ratengoods@gmail.com");
+        WebElement vkPassField = driver.findElement(By.cssSelector(vkPassInputCss));
+        vkPassField.sendKeys("Test1ng");
+        WebElement vkLoginButton = driver.findElement(By.cssSelector("#install_allow"));
+        vkLoginButton.click();
+
+        Thread.sleep(3000);
+        driver.get(profileUrl);
+
+        String userName = driver.findElement(By.cssSelector(profileNameCss)).getText();
+        assertEquals("Valentinnн"+"\n"+"Kuzmenkovvв", userName);
+
+        String userStatus = driver.findElement(By.cssSelector(profileStatusCss)).getText();
+        assertEquals("пользователь", userStatus.toLowerCase());
+    }
+
+    static void authWithFb() throws InterruptedException{
+        WebElement vkEmailField = driver.findElement(By.cssSelector(fbEmailInputCss));
+        vkEmailField.sendKeys("t.ratengoods@yandex.ru");
+        WebElement vkPassField = driver.findElement(By.cssSelector(fbPassInputCss));
+        vkPassField.sendKeys("Test1ng");
+        WebElement vkLoginButton = driver.findElement(By.cssSelector(fbLoginButtonCss));
+        vkLoginButton.click();
+
+        Thread.sleep(3000);
+        driver.get(profileUrl);
+
+        String userName = driver.findElement(By.cssSelector(profileNameCss)).getText();
+        assertEquals("Testero"+"\n"+"Testingovich", userName);
+
+        String userStatus = driver.findElement(By.cssSelector(profileStatusCss)).getText();
+        assertEquals("пользователь", userStatus.toLowerCase());
     }
 
     static void quit() {

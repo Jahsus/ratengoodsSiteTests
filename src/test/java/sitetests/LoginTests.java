@@ -30,6 +30,8 @@ public class LoginTests {
     public void loginWithEmailTest() throws Exception{
         Core.loadMainPage();
         Core.clickLoginButton();
+        Core.authEmail();
+
 
 
     }
@@ -39,7 +41,19 @@ public class LoginTests {
         Core.loadMainPage();
         Core.clickLoginButton();
         Core.clickVkButton();
+        Core.authWithVk();
+
     }
+
+    @Test
+    public void loginSocialFbTest() throws Exception{
+        Core.loadMainPage();
+        Core.clickLoginButton();
+        Core.clickFbButton();
+        Core.authWithFb();
+
+    }
+
 
 }
 
