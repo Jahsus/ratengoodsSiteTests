@@ -22,9 +22,14 @@ public class Core {
     private static String userButtonCss = ".user";
     private static String groupPolicyCloseButton = "div.popup-policy__close";
 
+    public static String emailInput = ".login-email";
+    public static String passwordInput =".login-password";
+    public static String loginButton ="#id1";
+
     private static String vkButtonCss = "a.vk.social-auth-link";
     private static String vkEmailInputCss ="#login_submit > div > div > input:nth-child(7)";
     private static String vkPassInputCss ="#login_submit > div > div > input:nth-child(9)";
+    private static String vkLoginButtonCss = "#install_allow";
 
     private static String fbButtonCss = "a.fb.social-auth-link";
     private static String fbEmailInputCss ="#email";
@@ -33,13 +38,13 @@ public class Core {
 
     private static String gpButtonCss = "a.gp.social-auth-link";
     private static String gpEmailInputCss ="#identifierId";
-    private static String gpPassInputCss = ""
+    private static String gpEmailAcceptButtonCss = "#identifierNext > content > span";
+    private static String gpPassInputCss = "#password > div.aCsJod.oJeWuf > div > div.Xb9hP > input";
+    private static String gpPassAcceptButtonCss = "#passwordNext > content > span";
 
     private static String profileNameCss = "p.user-name";
     private static String profileStatusCss = "p.user-expert";
-    public static String emailInput = ".login-email";
-    public static String passwordInput =".login-password";
-    public static String loginButton ="#id1";
+
 
 
 
@@ -113,7 +118,7 @@ public class Core {
         vkEmailField.sendKeys("t.ratengoods@gmail.com");
         WebElement vkPassField = driver.findElement(By.cssSelector(vkPassInputCss));
         vkPassField.sendKeys("Test1ng");
-        WebElement vkLoginButton = driver.findElement(By.cssSelector("#install_allow"));
+        WebElement vkLoginButton = driver.findElement(By.cssSelector(vkLoginButtonCss));
         vkLoginButton.click();
 
         Thread.sleep(3000);
@@ -145,18 +150,21 @@ public class Core {
     }
 
     static void authWithGp() throws InterruptedException{
-        WebElement vkEmailField = driver.findElement(By.cssSelector(gpEmailInputCss));
-        vkEmailField.sendKeys("tt.ratengoods@gmail.com");
-        WebElement vkPassField = driver.findElement(By.cssSelector(gpPassInputCss));
-        vkPassField.sendKeys("Test1ng");
-        WebElement vkLoginButton = driver.findElement(By.cssSelector("#install_allow"));
-        vkLoginButton.click();
+        WebElement gpEmailField = driver.findElement(By.cssSelector(gpEmailInputCss));
+        gpEmailField.sendKeys("tt.ratengoods@gmail.com");
+        WebElement gpEmailConfirmButton = driver.findElement(By.cssSelector(gpEmailAcceptButtonCss));
+        gpEmailConfirmButton.click();
+        Thread.sleep(500);
+        WebElement gpPassField = driver.findElement(By.cssSelector(gpPassInputCss));
+        gpPassField.sendKeys("Test1ng.RG");
+        WebElement gpPassConfirmButton = driver.findElement(By.cssSelector(gpPassAcceptButtonCss));
+        gpPassConfirmButton.click();
 
         Thread.sleep(3000);
         driver.get(profileUrl);
 
         String userName = driver.findElement(By.cssSelector(profileNameCss)).getText();
-        assertEquals("Valentinnн"+"\n"+"Kuzmenkovvв", userName);
+        assertEquals("Testерой"+"\n"+"Testingovichй", userName);
 
         String userStatus = driver.findElement(By.cssSelector(profileStatusCss)).getText();
         assertEquals("пользователь", userStatus.toLowerCase());

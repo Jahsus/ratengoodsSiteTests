@@ -49,7 +49,7 @@ public class LoginTests {
     }
 
     @Test
-    public void loginSocialGplustest() throws Exception{
+    public void loginSocialGplusTest() throws Exception{
         Core.loadMainPage();
         Core.clickLoginButton();
         Core.clickGpButton();
