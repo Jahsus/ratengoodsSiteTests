@@ -1,5 +1,6 @@
 package sitetests;
 
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -12,7 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 
 public class Core {
@@ -29,8 +30,13 @@ public class Core {
     private static String logoCss = "body > header > div > a";
 
     public static String emailInput = ".login-email";
-    public static String passwordInput =".login-password";
-    public static String loginButton ="#id1";
+    public static String passwordInput = ".login-password";
+    public static String loginButton = "#id1";
+    public static String remindPassButtonCss = "[href=\"#forgot-pwd\"]";
+    public static String remindPassEmailFieldCss = ".email";
+    public static String remindEmailConfirmButtonCss = "button.btn:nth-child(3)";
+    public static String errorMessageCss ="div.help-block";
+    public static String loginWindowCss ="#signup > div:nth-child(1) > div:nth-child(1)";
 
     public static String regButtonCss = "#signup > div > div > div.modal-header > ul > li:nth-child(2) > a";
     public static String regFirstNameInputCss = "#sign-up > div.modal-form > div:nth-child(1) > input";
@@ -97,15 +103,20 @@ public class Core {
     }
 
     static void openLoginWindow() throws InterruptedException {
-        WebElement element = driver.findElement(By.cssSelector(userButtonCss));
-        element.click();
+        WebElement loginButton = driver.findElement(By.cssSelector(userButtonCss));
+        loginButton.click();
         Thread.sleep(1000);
+
+        WebElement loginWindow = (new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(loginWindowCss))));
+        Assert.assertTrue(loginWindow.isDisplayed());
     }
 
     static void closeLoginWindow() {
         WebElement element = driver.findElement(By.cssSelector("#signup > div > div > div.modal-header > button > span"));
         element.click();
 
+        WebElement loginWindow = (new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(loginWindowCss))));
+        Assert.assertTrue(!loginWindow.isDisplayed());
 
     }
 
@@ -151,6 +162,16 @@ public class Core {
         Thread.sleep(500);
     }
 
+    static void remindPassword() {
+        WebElement remindPassButton = driver.findElement(By.cssSelector(remindPassButtonCss));
+        remindPassButton.click();
+        WebElement emailInputField = driver.findElement(By.cssSelector(remindPassEmailFieldCss));
+        emailInputField.sendKeys("jah.jaha@gmail.com");
+        WebElement remindEmailConfirmButton = driver.findElement(By.cssSelector(remindEmailConfirmButtonCss));
+        remindEmailConfirmButton.click();
+
+    }
+
     static void registrationSuccess() throws InterruptedException{
 
         String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()); // Генерим строку с текущим временем и датой
@@ -179,7 +200,7 @@ public class Core {
 
 
 
-    static void authEmail() throws InterruptedException {
+    static void authByEmail() throws InterruptedException {
         WebElement emailField = driver.findElement(By.cssSelector(emailInput));
         emailField.sendKeys("jah.jaha@gmail.com");
         WebElement passwordField = driver.findElement(By.cssSelector(passwordInput));
@@ -194,6 +215,20 @@ public class Core {
 
         String userStatus = driver.findElement(By.cssSelector(profileStatusCss)).getText();
         assertEquals("пользователь", userStatus.toLowerCase());
+    }
+
+    static void authByWrongEmail() throws InterruptedException {
+        WebElement emailField = driver.findElement(By.cssSelector(emailInput));
+        emailField.sendKeys("hah.haha@gmail.com");
+        WebElement passwordField = driver.findElement(By.cssSelector(passwordInput));
+        passwordField.sendKeys("VAdb25qwe");
+        WebElement elementloginButton = driver.findElement(By.cssSelector(loginButton));
+        elementloginButton.click();
+
+
+        String errorMessage = driver.findElement(By.cssSelector(errorMessageCss)).getText();
+        assertEquals("неверный логин или пароль.", errorMessage.toLowerCase());
+
     }
 
     static void authWithVk() throws InterruptedException{
@@ -254,70 +289,10 @@ public class Core {
     }
 
 
+
     static void quit() {
         driver.close();
 
     }
-
-  /*  static void slidePromo(int count) throws InterruptedException {
-        WebElement arrowNext = driver.findElement(By.cssSelector());
-        System.out.println(arrowNext.getText());
-
-        // Цикл для реализации пяти нажатий кнопки промо-слайдера
-        for (int i = 0; i < count; i++) {
-            arrowNext.click();
-            Thread.sleep(500);
-        }
-    }
-
-    public static void clickWatchLatter() throws InterruptedException {
-        // Нажать кнопку "Смотреть позже"
-        WebElement watchLatter = driver.findElement(By.xpath());
-        watchLatter.click();
-        String clickedMovieID = watchLatter.getAttribute("data-object-id");
-        Thread.sleep(2000);
-        System.out.println(clickedMovieID);
-
-    }
-
-    static void checkWatchLatterButton() throws InterruptedException {
-        // Не нашёл как проверить что звезда стала "красной", поэтому проверяю, что класс кнопки изменился на *active
-        WebElement watchLatter = driver.findElement(By.xpath());
-        assertThat(watchLatter.getAttribute("class"), is());
-
-
-    }
-
-    static void checkWatchLatterBlock() throws InterruptedException {
-
-        // Почему-то в "чистом" браузере кнопка "Смотреть позже" динамически не меняется
-        // и не появляется блок с фильмом добавленным в "Смотерть позже" поэтому пришлось обновлять страницу
-        driver.navigate().refresh();
-        Thread.sleep(3000);
-
-        //Сравнить ссылки на фильм из блока промо и блока См. позже
-        String watchLatterLink = driver.findElement(By.cssSelector()).getAttribute("href");
-        String clickedMovieID = driver.findElement(By.xpath()).getAttribute("data-object-id");
-        assertThat(watchLatterLink, is());
-
-        // Получение текста  и проверка заголовка появившегося блока "Смотреть позже"
-        String watchLatterButtonText = driver.findElement(By.cssSelector()).getText();
-        System.out.println(watchLatterButtonText);
-
-        String selectedMovieID = driver.findElement(By.cssSelector()).getAttribute("data-id");
-        System.out.println(clickedMovieID);
-        assertThat(watchLatterButtonText, is("См. позже"));
-
-        // Проверка того, что совпадают ID фильмов нажатой кнопки "Смотреть позже" и добавленного в блок под слайдером
-        assertThat(selectedMovieID,is(clickedMovieID));
-        System.out.println("Всё верно, в раздел \"Смотреть позже\" добавлен правильный фильм.");
-
-    }
-
-
-*/
-
-
-
 
 }

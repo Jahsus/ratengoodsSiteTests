@@ -1,8 +1,9 @@
 package sitetests;
 
-import org.junit.*;
-
-import static org.junit.Assert.assertEquals;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.Test;
 
 public class LoginTests {
     @Before
@@ -36,10 +37,17 @@ public class LoginTests {
     }
 
     @Test
-    public void loginWithEmailTest() throws Exception{
+    public void loginWithValidEmailTest() throws Exception{
         Core.loadMainPage();
         Core.openLoginWindow();
-        Core.authEmail();
+        Core.authByEmail();
+    }
+
+    @Test
+    public void loginWithWrongEmailTest() throws Exception{
+        Core.loadMainPage();
+        Core.openLoginWindow();
+        Core.authByWrongEmail();
     }
 
     @Test
@@ -49,6 +57,7 @@ public class LoginTests {
         Core.clickVkButton();
         Core.authWithVk();
     }
+
 
     @Test
     public void loginSocialFbTest() throws Exception{
@@ -95,7 +104,6 @@ public class LoginTests {
     }
 
 
-
     @Test
     public void registrationTest() throws Exception{
         Core.loadMainPage();
@@ -103,6 +111,13 @@ public class LoginTests {
         Core.clickRegisterButton();
         Core.registrationSuccess();
 
+    }
+
+    @Test
+    public void remindPasswordTest() throws Exception{
+        Core.loadMainPage();
+        Core.openLoginWindow();
+        Core.remindPassword();
     }
 
 }
